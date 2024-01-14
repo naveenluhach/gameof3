@@ -47,9 +47,6 @@ Data Layer
 Database: TBD
 Queue: TBD
 
-Orchestration:
-Zookeeper
-
 Messaging:
 Kafka
 
@@ -73,21 +70,11 @@ For Linux, follow the steps here (and do all the steps)
 
 
 Commands used:
-First, we need to start the zookeeper and then Kafka.
-To start zookeeper:
-Step 1: Go inside the folder where zookeeper tar was extracted and go to bin folder.
-Step 2: Run command: zkServer start 
-Note:(zkServer.sh start did not work on my machine)
+Update, using Kafka version 3.6.1 which doesn't require zookeeper at all.
 
 To start kafka server: 
 Step 1: Go inside the folder where kafka zip file extracted and go to bin folder.
 Step 2: Run command : kafka-server-start ../config/server.properties 
+Step 3: Create a kafka topic test.
 
-
-Issues and their solution(contains possible duplicate instructions):
-After downloading zookeeper, when I tried to run it, it failed.
-Path where below commands needs to be run: Inside the <unzipped tar folder>/bin folder where zkServer.sh is present
-Example: /Users/naveenluhach/Downloads/apache-zookeeper-3.8.3-bin/bin
-The command which worked is : zkServer start instead of zkServer.sh start 
-How to check if zookeeper is running? Run the command: zkServer status
 
