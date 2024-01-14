@@ -47,5 +47,25 @@ Data Layer
 Database: TBD
 Queue: TBD
 
-Deployment and Hosting:
+**Deployment and Hosting:**
+Pre-requiste
+
+Step 1:
+You must install Docker with the steps mentioned below to work.
+
+Install Docker Desktop on Mac.
+
+Install Docker Desktop on Windows.
+
+Install Docker on Linux (choose your distro on the lefthand side menu).
+
+Installing Docker Compose
+For Mac & Windows, if you have installed Docker Desktop, then Docker Compose is included as part of those desktop installs.
+
+For Linux, follow the steps here (and do all the steps)
+
+
+Issues and their solution:
+After downloading zookeeper, when I tried to run it, it failed.
+The command which worked is : zkServer start instead of zkServer.sh start
 
