@@ -74,5 +74,8 @@ For Linux, follow the steps here (and do all the steps)
 
 Issues and their solution:
 After downloading zookeeper, when I tried to run it, it failed.
-The command which worked is : zkServer start instead of zkServer.sh start
+Path where below commands needs to be run: Inside the <unzipped tar folder>/bin folder where zkServer.sh is present
+Example: /Users/naveenluhach/Downloads/apache-zookeeper-3.8.3-bin/bin
+The command which worked is : zkServer start instead of zkServer.sh start 
+How to check if zookeeper is running? Run the command: zkServer status
 
