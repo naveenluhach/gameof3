@@ -53,6 +53,7 @@ Zookeeper
 Messaging:
 Kafka
 
+Note: Added Kafka to handle the case of offline users. When 1st user sends messages to 2nd user and 2nd user is offline, we won't process the messages until the 2nd user comes online, messages will stay in kafka topic.
 **Deployment and Hosting:**
 Pre-requiste
 
