@@ -47,6 +47,12 @@ Data Layer
 Database: TBD
 Queue: TBD
 
+Orchestration:
+Zookeeper
+
+Messaging:
+Kafka
+
 **Deployment and Hosting:**
 Pre-requiste
 
