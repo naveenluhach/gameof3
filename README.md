@@ -72,7 +72,19 @@ For Mac & Windows, if you have installed Docker Desktop, then Docker Compose is 
 For Linux, follow the steps here (and do all the steps)
 
 
-Issues and their solution:
+Commands used:
+First, we need to start the zookeeper and then Kafka.
+To start zookeeper:
+Step 1: Go inside the folder where zookeeper tar was extracted and go to bin folder.
+Step 2: Run command: zkServer start 
+Note:(zkServer.sh start did not work on my machine)
+
+To start kafka server: 
+Step 1: Go inside the folder where kafka zip file extracted and go to bin folder.
+Step 2: Run command : kafka-server-start ../config/server.properties 
+
+
+Issues and their solution(contains possible duplicate instructions):
 After downloading zookeeper, when I tried to run it, it failed.
 Path where below commands needs to be run: Inside the <unzipped tar folder>/bin folder where zkServer.sh is present
 Example: /Users/naveenluhach/Downloads/apache-zookeeper-3.8.3-bin/bin
