@@ -66,7 +66,9 @@ Step 4:
 Run spring boot application.
 
 Step 5:
-Go to http://localhost:8088/ 
+Go to http://localhost:8088/ and enter:
+For 1st player: user1 for both real name and nick name.
+For 2nd player: user2 for both real name and nick name.
 
 Step 6: Only when you press -1, game will start.
 
