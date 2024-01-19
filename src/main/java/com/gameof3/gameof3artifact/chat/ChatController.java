@@ -56,8 +56,6 @@ public class ChatController {
                 int lastNumber = chatMessageService.getLastNumber(chatMessage);
                 int nextNum = clientMessageService.getNextMoveNum(lastNumber);
 
-                System.out.println("Expected: "+nextNum);
-                System.out.println("Actual:"+number);
                 if(number==nextNum){
                     if(number==1){
                        gameService.completeGame(game);// end the game
