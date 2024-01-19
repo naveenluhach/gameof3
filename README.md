@@ -37,44 +37,38 @@ Check configurability
 
 
 
-Technologies used:
+**Technologies used:**
+1. Application Layer : Java, SpringBoot
+2. Data Layer : MongoDB (for offline users, we fetch all the messages as soon as user logs in/becomes online) 2. Queue: Not Used (will be more light weight and real time)
 
-Application Layer
-Language: Java
-Framework: SpringBoot
-
-Data Layer
-Database: TBD
-Queue: TBD
-
-Messaging:
-Kafka
-
-Note: Added Kafka to handle the case of offline users. When 1st user sends messages to 2nd user and 2nd user is offline, we won't process the messages until the 2nd user comes online, messages will stay in kafka topic.
 **Deployment and Hosting:**
 Pre-requiste
 
 Step 1:
-You must install Docker with the steps mentioned below to work.
+Install Docker
 
-Install Docker Desktop on Mac.
+Step 2: docker-compose up
 
-Install Docker Desktop on Windows.
+Step 3:
 
-Install Docker on Linux (choose your distro on the lefthand side menu).
+Set players mode using API to either: auto/man for both players.
+For simplicity: use - user1 and user2
 
-Installing Docker Compose
-For Mac & Windows, if you have installed Docker Desktop, then Docker Compose is included as part of those desktop installs.
+curl --location --request PUT 'http://localhost:8088/playerMode' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Basic Og==' \
+--data '{
+    "player": "user2",
+    "playerMode": "auto"
+}'
 
-For Linux, follow the steps here (and do all the steps)
+Step 4: 
+Run spring boot application.
 
+Step 5:
+Go to http://localhost:8088/ 
 
-Commands used:
-Update, using Kafka version 3.6.1 which doesn't require zookeeper at all.
+Step 6: Only when you press -1, game will start.
 
-To start kafka server: 
-Step 1: Go inside the folder where kafka zip file extracted and go to bin folder.
-Step 2: Run command : kafka-server-start ../config/server.properties 
-Step 3: Create a kafka topic test.
 
 
