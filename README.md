@@ -76,5 +76,7 @@ For 2nd player: user2 for both real name and nick name.
 
 Step 7: Only when you press -1, game will start.
 
+Step 8: Toggle the mode from the UI and make sure it matches the Step 3 API. (TODO: Integration of Client Toggle UI Button with Backend API)
+
 
 
