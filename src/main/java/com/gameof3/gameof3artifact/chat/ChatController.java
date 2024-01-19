@@ -17,6 +17,9 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
+/*
+ChatController to handle messages between 2 users
+ */
 public class ChatController {
 
     private final ChatMessageService chatMessageService;
@@ -24,6 +27,9 @@ public class ChatController {
     private final ChatRoomService chatRoomService;
     private final ClientMessageService clientMessageService;
 
+    /*
+    method to process message passing and checks and balance on the overall flow, think of this like orchestrator
+     */
     @MessageMapping("/chat")
     public void processMessage(@Payload Message chatMessage) {
         int number = chatMessageService.processMessage(chatMessage);
@@ -78,6 +84,9 @@ public class ChatController {
         }
     }
 
+    /*
+    method to find chat messages when a player logs into the application
+     */
     @GetMapping("/messages/{senderId}/{recipientId}")
     public ResponseEntity<List<Message>> findChatMessages(@PathVariable String senderId,
                                                               @PathVariable String recipientId) {

@@ -15,26 +15,9 @@ public class ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
 
-    public Optional<String> getChatRoomId(
-            String senderId,
-            String recipientId,
-            boolean createNewRoomIfNotExists
-    ) {
-        return chatRoomRepository
-                .findBySenderIdAndRecipientId(senderId, recipientId)
-                .map(ChatRoom::getChatId)
-                .or(() -> {
-                    if(createNewRoomIfNotExists) {// false
-                        var chatId = createChatId(senderId, recipientId);
-                        return Optional.of(chatId);
-                    }
-
-                    return  Optional.empty();
-                });
-    }
-
-    // find if chatroom is present, if yes return it
-    //else if room is empty and do not create, return
+    /*
+    method to check if chat room exists or not
+     */
     public String checkIfChatRoomIdExists(String senderId, String recipientId) {
         ChatRoom chatRoom = chatRoomRepository.findBySenderIdAndRecipientIdcustom(senderId, recipientId);
         if(chatRoom==null){
@@ -43,11 +26,16 @@ public class ChatRoomService {
         return chatRoom.getChatId();
     }
 
-    // will only be called after checkIfChatRoomIdExists
+    /*
+    method to find chat room id
+     */
     public ChatRoom findChatRoomId(String senderId, String recipientId){
         return chatRoomRepository.findBySenderIdAndRecipientIdcustom(senderId, recipientId);
     }
 
+    /*
+    method to get or create chat id
+     */
     public String getOrCreateChatId(String senderId, String recepientId){
         var chatId = "";
         String chatRoomExists = checkIfChatRoomIdExists(senderId, recepientId);
@@ -61,11 +49,17 @@ public class ChatRoomService {
         return chatId;
     }
 
+    /*
+    method to find all chat messages of a chat room
+     */
     public List<Message> findMessages(String chatRoomId){
         return chatMessageRepository.findByChatId(chatRoomId);
     }
 
 
+    /*
+    method to create chat id
+     */
     public String createChatId(String senderId, String recipientId) {
         var chatId = String.format("%s_%s", senderId, recipientId);
 
