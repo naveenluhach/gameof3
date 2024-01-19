@@ -210,7 +210,8 @@ a.logout {
 
 .switch {
     position: relative;
-    display: inline-block;
+    display: flex;
+    align-items: center;
     width: 60px;
     height: 34px;
 }
@@ -257,4 +258,8 @@ input:checked + .slider:before {
     -webkit-transform: translateX(26px);
     -ms-transform: translateX(26px);
     transform: translateX(26px);
+}
+
+.toggle-name {
+     margin-right: 10px; /* Adjust the margin as needed */
 }
