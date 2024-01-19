@@ -54,6 +54,7 @@ Step 3:
 Set players mode using API to either: auto/man for both players.
 For simplicity: use - user1 and user2
 
+
 curl --location --request PUT 'http://localhost:8088/playerMode' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Basic Og==' \
@@ -62,15 +63,18 @@ curl --location --request PUT 'http://localhost:8088/playerMode' \
     "playerMode": "auto"
 }'
 
-Step 4: 
+Step 4:
+Check mongo db data at: http://localhost:8081/db/chat_app/
+
+Step 5: 
 Run spring boot application.
 
-Step 5:
+Step 6:
 Go to http://localhost:8088/ and enter:
 For 1st player: user1 for both real name and nick name.
 For 2nd player: user2 for both real name and nick name.
 
-Step 6: Only when you press -1, game will start.
+Step 7: Only when you press -1, game will start.
 
 
 
