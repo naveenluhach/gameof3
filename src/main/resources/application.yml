@@ -1,0 +1,12 @@
+spring:
+  data:
+    mongodb:
+      username: naveen
+      password: naveen
+      host: localhost
+      port: 27017
+      database: chat_app
+      authentication-database: admin
+server:
+  port: 8088
+
