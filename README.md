@@ -56,7 +56,7 @@ Run Docker
 **Step 4:**
 Check if you can see mongo db data at: http://localhost:8081/db/chat_app/
 
-**Step 5: **
+**Step 5:**
 Run spring boot application.
 
 **Step 6:**
