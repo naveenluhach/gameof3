@@ -28,7 +28,7 @@ public class PlayerMessageService {
      * @param playerMessage
      * @return
      */
-    public PlayerMessage saveNew(PlayerMessage playerMessage){
+    public PlayerMessage save(PlayerMessage playerMessage){
         String chatId = "";
         String chatRoomExists = chatRoomService.checkIfChatRoomIdExists(playerMessage.getSenderId(), playerMessage.getRecipientId());
         if(!chatRoomExists.equals("-1")){
@@ -86,7 +86,7 @@ public class PlayerMessageService {
     /**
      * Method to find the last number sent between 2 players
      * @param playerMessage
-     * @return
+     * @return int
      */
     public int getLastNumber(PlayerMessage playerMessage){
         PlayerMessage lastPlayerMessage = getlastMessage(playerMessage);
@@ -98,7 +98,7 @@ public class PlayerMessageService {
     /**
      * Method to find the last message sent between 2 players
      * @param playerMessage
-     * @return
+     * @return PlayerMessage
      */
     private PlayerMessage getlastMessage(PlayerMessage playerMessage){
        List<PlayerMessage> playerMessages = chatMessageRepository.findByChatId(playerMessage.getChatId());
@@ -110,8 +110,8 @@ public class PlayerMessageService {
 
     /**
      * Method to find valid response
-     * @param num
-     * @return
+     * @param playerMessage
+     * @return int
      */
     public int getNextMoveNum(PlayerMessage playerMessage){
         int lastNumberbetweenUsers = getLastNumber(playerMessage);

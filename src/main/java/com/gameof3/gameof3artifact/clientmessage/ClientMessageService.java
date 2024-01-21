@@ -31,85 +31,81 @@ public class ClientMessageService {
      */
 
     public void sendGameStartedMessage(PlayerMessage playerMessage){
-        PlayerMessage gameOverPlayerMessage = new PlayerMessage();
-        gameOverPlayerMessage.setContent("Game has started by "+ playerMessage.getSenderId());
-        gameOverPlayerMessage.setSenderId(playerMessage.getSenderId());
-        gameOverPlayerMessage.setRecipientId(playerMessage.getRecipientId());
-        gameOverPlayerMessage.setTimestamp(new Date());
-        gameOverPlayerMessage.setChatId(playerMessage.getChatId());
-        PlayerMessage savedMsg = playerMessageService.saveNew(gameOverPlayerMessage);
-        System.out.println("Message sent:"+ savedMsg.getContent());
-        sendMessageToClient(savedMsg);
+        PlayerMessage messageToSend = new PlayerMessage();
+        messageToSend.setContent("Game has started by "+ playerMessage.getSenderId());
+        messageToSend.setSenderId(playerMessage.getSenderId());
+        messageToSend.setRecipientId(playerMessage.getRecipientId());
+        messageToSend.setTimestamp(new Date());
+        messageToSend.setChatId(playerMessage.getChatId());
+        PlayerMessage persistedMessage = playerMessageService.save(messageToSend);
+        sendMessageToClient(persistedMessage);
     }
 
     public void sendRandomNumberMessage(PlayerMessage playerMessage){
-        Random rand = new Random();
-        // Generate random integers in range 0 to 999
-        int randomNumber = rand.nextInt(1000);
-        PlayerMessage randomNumberMsg = new PlayerMessage();
-        String randomNumContent = String.valueOf(randomNumber);
-        randomNumberMsg.setContent(randomNumContent);
-        randomNumberMsg.setSenderId(playerMessage.getSenderId());
-        randomNumberMsg.setRecipientId(playerMessage.getRecipientId());
-        randomNumberMsg.setTimestamp(new Date());
-        randomNumberMsg.setChatId(playerMessage.getChatId());
-        PlayerMessage savedMsg = playerMessageService.saveNew(randomNumberMsg);
-        System.out.println("Message sent:"+ savedMsg.getContent());
-        sendMessageToClient(savedMsg);
+        int randomNumber = generateRandomNumber();
+        String randomNumContent = getRandomNumContent(randomNumber);
+        PlayerMessage messageToSend = new PlayerMessage();
+        messageToSend.setContent(randomNumContent);
+        messageToSend.setSenderId(playerMessage.getSenderId());
+        messageToSend.setRecipientId(playerMessage.getRecipientId());
+        messageToSend.setTimestamp(new Date());
+        messageToSend.setChatId(playerMessage.getChatId());
+        PlayerMessage persistedMessage = playerMessageService.save(messageToSend);
+        sendMessageToClient(persistedMessage);
     }
 
     public void sendInvalidNumberMessage(PlayerMessage chatPlayerMessage){
-        playerMessageService.saveNew(chatPlayerMessage);
-        PlayerMessage newPlayerMessage = new PlayerMessage();
-        newPlayerMessage.setContent("Please send -1 to start the game");
-        newPlayerMessage.setSenderId(chatPlayerMessage.getRecipientId());// on behalf of recipient
-        newPlayerMessage.setRecipientId(chatPlayerMessage.getSenderId());
-        newPlayerMessage.setTimestamp(new Date());
-        newPlayerMessage.setChatId(chatPlayerMessage.getChatId());
-        PlayerMessage savedMsg = playerMessageService.saveNew(newPlayerMessage);//"Please send -1 to start the game"
-        sendMessageToClient(savedMsg);
+        playerMessageService.save(chatPlayerMessage);
+        PlayerMessage messageToSend = new PlayerMessage();
+        messageToSend.setContent("Please send -1 to start the game");
+        messageToSend.setSenderId(chatPlayerMessage.getRecipientId());// on behalf of recipient
+        messageToSend.setRecipientId(chatPlayerMessage.getSenderId());
+        messageToSend.setTimestamp(new Date());
+        messageToSend.setChatId(chatPlayerMessage.getChatId());
+        PlayerMessage persistedMessage = playerMessageService.save(messageToSend);//"Please send -1 to start the game"
+        sendMessageToClient(persistedMessage);
     }
 
     public void sendInvalidSenderMessage(PlayerMessage playerMessage){
         //chatMessageService.saveNew(chatMessage);
-        PlayerMessage newPlayerMessage = new PlayerMessage();
-        newPlayerMessage.setContent("Wait for my turn");
-        newPlayerMessage.setSenderId(playerMessage.getRecipientId());// on behalf of recipient
-        newPlayerMessage.setRecipientId(playerMessage.getSenderId());
-        newPlayerMessage.setTimestamp(new Date());
-        newPlayerMessage.setChatId(playerMessage.getChatId());
-        sendMessageToClient(newPlayerMessage);
+        PlayerMessage messageToSend = new PlayerMessage();
+        messageToSend.setContent("Wait for my turn");
+        messageToSend.setSenderId(playerMessage.getRecipientId());// on behalf of recipient
+        messageToSend.setRecipientId(playerMessage.getSenderId());
+        messageToSend.setTimestamp(new Date());
+        messageToSend.setChatId(playerMessage.getChatId());
+        sendMessageToClient(messageToSend);
     }
 
     public void sendLastMessage(PlayerMessage playerMessage){
-        PlayerMessage savedMsg = playerMessageService.saveNew(playerMessage);
+        PlayerMessage savedMsg = playerMessageService.save(playerMessage);
         sendMessageToClient(savedMsg);
     }
 
     public void sendGameResultMessage(PlayerMessage chatPlayerMessage){
-        PlayerMessage playerMessage = new PlayerMessage();
-        playerMessage.setContent("Game won by "+ chatPlayerMessage.getSenderId());
-        playerMessage.setSenderId(chatPlayerMessage.getSenderId());
-        playerMessage.setRecipientId(chatPlayerMessage.getRecipientId());
-        playerMessage.setTimestamp(new Date());
-        PlayerMessage gameOverPlayerMessage = playerMessageService.saveNew(playerMessage);//"Game over"
+        PlayerMessage messageToSend = new PlayerMessage();
+        messageToSend.setContent("Game won by "+ chatPlayerMessage.getSenderId());
+        messageToSend.setSenderId(chatPlayerMessage.getSenderId());
+        messageToSend.setRecipientId(chatPlayerMessage.getRecipientId());
+        messageToSend.setTimestamp(new Date());
+        PlayerMessage gameOverPlayerMessage = playerMessageService.save(messageToSend);//"Game over"
         sendMessageToClient(gameOverPlayerMessage);
     }
 
     public void sendRegularMessage(PlayerMessage playerMessage){
-        PlayerMessage savedMsg = playerMessageService.saveNew(playerMessage);
+        PlayerMessage savedMsg = playerMessageService.save(playerMessage);
         System.out.println("Message sent:"+ savedMsg.getContent());
         sendMessageToClient(savedMsg);
     }
 
     public void sendRegularInvalidMessage(PlayerMessage chatPlayerMessage, int playerNumber){
-        PlayerMessage newPlayerMessage = new PlayerMessage();
-        newPlayerMessage.setContent("Please send a valid number to continue the game. "+playerNumber+" is not a valid number");
-        newPlayerMessage.setSenderId(chatPlayerMessage.getRecipientId());// on behalf of recipient
-        newPlayerMessage.setRecipientId(chatPlayerMessage.getSenderId());
-        newPlayerMessage.setTimestamp(new Date());
+        PlayerMessage messageToSend = new PlayerMessage();
+        messageToSend.setContent("Please send a valid number to continue the game. "+playerNumber+" is not a valid number");
+        messageToSend.setSenderId(chatPlayerMessage.getRecipientId());// on behalf of recipient
+        messageToSend.setRecipientId(chatPlayerMessage.getSenderId());
+        messageToSend.setTimestamp(new Date());
         // Message savedMsg = chatMessageService.saveNew(newMessage);//"Please send valid number to continue the game"
-        sendMessageToClient(newPlayerMessage);
+        sendMessageToClient(messageToSend);
     }
 
     private int sendMessageToClient(PlayerMessage savedMsg){
@@ -123,5 +119,16 @@ public class ClientMessageService {
                 )
         );
         return 1;
+    }
+
+    private int generateRandomNumber(){
+        Random rand = new Random();
+        // Generate random integers in range 0 to 999
+        int randomNumber = rand.nextInt(1000);
+        return randomNumber;
+    }
+
+    private String getRandomNumContent(int randomNumber){
+        return String.valueOf(randomNumber);
     }
 }
