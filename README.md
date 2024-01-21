@@ -1,7 +1,7 @@
 # gameof3
 Game between 2 players
 
-Problem Statement:
+**Problem Statement:**
 
 Goal:
 The goal is to implement a game with two independent units – the players –
@@ -38,35 +38,42 @@ Check configurability
 
 
 **Technologies used:**
-1. Application Layer : Java, SpringBoot
+1. Application Layer : Java, SpringBoot, Web sockets, JS, HTML, CSS
 2. Data Layer : MongoDB (for offline users, we fetch all the messages as soon as user logs in/becomes online) 2. Queue: Not Used (will be more light weight and real time)
 
-**Deployment and Hosting:**
+**DEPLOYMENT AND HOSTING:**
 Pre-requiste
 
-Step 1:
+**Step 1:**
 Install Docker
-
-Step 2:
+**
+Step 2:**
 Run Docker 
 
-Step 3: docker-compose up in the project directory once you clone it.
+**Step 3:** docker-compose up (in the project directory once you clone it)
 
 
-Step 4:
+**Step 4:**
 Check if you can see mongo db data at: http://localhost:8081/db/chat_app/
 
-Step 5: 
+**Step 5: **
 Run spring boot application.
 
-Step 6:
-Go to http://localhost:8088/ and enter:
+**Step 6:**
+Open http://localhost:8088/ in two browser instances and enter:
 For 1st player: user1 for both real name and nick name.
 For 2nd player: user2 for both real name and nick name.
 
-Step 7: Only when you press -1, game will start.
+**Step 7:** Only when you enter -1 in the message type box, the game will start.
 
-Step 8: Toggle the mode from the UI, initial mode is manual always. (TODO: Integration of Client Toggle UI Button with Backend API so that we can fetch the last mode of user)
+**Step 8:** Toggle the mode from the UI, initial mode is manual always. Happy playing :)
+
+
+
+
+**TODO and Future Work:**
+
+Integration of Client Toggle UI Button with Backend API so that we can fetch the last mode of user)
 Backend API developed for the same to create/edit mode:
 
 Set players mode using API to either: auto/man for both players.
