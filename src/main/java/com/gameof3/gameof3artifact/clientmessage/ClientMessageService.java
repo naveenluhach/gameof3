@@ -24,12 +24,6 @@ public class ClientMessageService {
      */
     private final SimpMessagingTemplate messagingTemplate;
 
-    /**
-     * setContent, setSenderId, setRecipientId, setTimestamp, setChatId
-     * setContent, setSenderId, setRecipientId, setTimestamp, setChatId
-     * setContent, setSenderId, setRecipientId, setTimestamp, setChatId
-     */
-
     public void sendGameStartedMessage(PlayerMessage playerMessage){
         String content = "Game has started by "+ playerMessage.getSenderId();
         PlayerMessage messageToSend = getMessageToSend(content, playerMessage.getSenderId(), playerMessage.getRecipientId(), playerMessage.getChatId());
@@ -62,13 +56,8 @@ public class ClientMessageService {
     }
 
     public void sendGameResultMessage(PlayerMessage chatPlayerMessage){
-        PlayerMessage messageToSend = new PlayerMessage();
         String content = "Game won by "+ chatPlayerMessage.getSenderId();
-        messageToSend.setContent(content);
-        messageToSend.setSenderId(chatPlayerMessage.getSenderId());
-        messageToSend.setRecipientId(chatPlayerMessage.getRecipientId());
-        messageToSend.setTimestamp(new Date());
-        // we need chat id during saving an extra message
+        PlayerMessage messageToSend = getMessageToSendWOChatId(content, chatPlayerMessage.getSenderId(), chatPlayerMessage.getRecipientId());
         PlayerMessage gameOverPlayerMessage = playerMessageService.save(messageToSend);
         sendMessageToClient(gameOverPlayerMessage);// save and send
     }
@@ -79,13 +68,11 @@ public class ClientMessageService {
     }
 
     public void sendRegularInvalidMessage(PlayerMessage chatPlayerMessage, int playerNumber){
-        PlayerMessage messageToSend = new PlayerMessage();
-        messageToSend.setContent("Please send a valid number to continue the game. "+playerNumber+" is not a valid number");
-        messageToSend.setSenderId(chatPlayerMessage.getRecipientId());
-        messageToSend.setRecipientId(chatPlayerMessage.getSenderId());
-        messageToSend.setTimestamp(new Date());
+        String content = "Please send a valid number to continue the game. "+playerNumber+" is not a valid";
+        PlayerMessage messageToSend = getMessageToSendWOChatId(content, chatPlayerMessage.getRecipientId(), chatPlayerMessage.getSenderId());
         // Message savedMsg = chatMessageService.saveNew(newMessage);//"Please send valid number to continue the game"
-        sendMessageToClient(messageToSend);// only send
+        // only send to client and do not save in DB
+        sendMessageToClient(messageToSend);
     }
 
     private int sendMessageToClient(PlayerMessage savedMsg){
@@ -119,6 +106,15 @@ public class ClientMessageService {
         messageToSend.setRecipientId(recipientId);
         messageToSend.setTimestamp(new Date());
         messageToSend.setChatId(chatId);
+        return messageToSend;
+    }
+
+    private PlayerMessage getMessageToSendWOChatId(String content, String senderId, String recipientId){
+        PlayerMessage messageToSend = new PlayerMessage();
+        messageToSend.setContent(content);
+        messageToSend.setSenderId(senderId);
+        messageToSend.setRecipientId(recipientId);
+        messageToSend.setTimestamp(new Date());
         return messageToSend;
     }
 }
