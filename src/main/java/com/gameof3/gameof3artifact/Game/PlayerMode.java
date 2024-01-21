@@ -13,13 +13,27 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @Builder
 @Document(collection = "player_mode")
+/**
+ * Represents a player mode entity in the application.
+ * This class stores information about the mode of a player, including the player's ID and mode.
+ */
 public class PlayerMode {
+
+    /**
+     * Unique identifier for the player mode.
+     */
     @Id
     private String id;
 
+    /**
+     * User ID of the player associated with this mode.
+     */
     @JsonProperty("player")
     private String player;
 
+    /**
+     * The mode of the player (e.g., "auto", "man").
+     */
     @JsonProperty("playerMode")
     private String playerMode;
 }
