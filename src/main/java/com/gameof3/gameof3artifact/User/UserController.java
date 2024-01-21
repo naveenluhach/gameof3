@@ -1,6 +1,8 @@
 package com.gameof3.gameof3artifact.User;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -18,6 +20,8 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+
+    Logger logger = LoggerFactory.getLogger(UserController.class);
 
     /**
      * Handles the WebSocket message for adding a user.

@@ -2,6 +2,8 @@ package com.gameof3.gameof3artifact.chat;
 
 import com.gameof3.gameof3artifact.Orchestrate.OrchestrateService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -28,12 +30,15 @@ public class ChatController {
      */
     private final OrchestrateService orchestrateService;
 
+    Logger logger = LoggerFactory.getLogger(ChatController.class);
+
     /**
      * Method to process message passing and checks and balance on the overall flow, think of this like orchestrator
      * @param playerMessage
      */
     @MessageMapping("/chat")
     public void processMessage(@Payload PlayerMessage playerMessage) {
+        logger.info("Received a payload : "+playerMessage);
         orchestrateService.processPlayerMessage(playerMessage);
     }
 
@@ -46,6 +51,7 @@ public class ChatController {
     @GetMapping("/messages/{senderId}/{recipientId}")
     public ResponseEntity<List<PlayerMessage>> findChatMessages(@PathVariable String senderId,
                                                                 @PathVariable String recipientId) {
+        logger.info("Received a request to fetch all messages between with senderId: "+ senderId +" recepientId: "+recipientId);
         return ResponseEntity
                 .ok(playerMessageService.findChatMessages(senderId, recipientId));
     }

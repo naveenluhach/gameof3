@@ -7,6 +7,8 @@ import com.gameof3.gameof3artifact.chat.PlayerMessageService;
 import com.gameof3.gameof3artifact.chat.PlayerMessage;
 import com.gameof3.gameof3artifact.clientmessage.ClientMessageService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,6 +22,8 @@ public class OrchestrateService {
     private final GameService gameService;
     private final ChatRoomService chatRoomService;
     private final ClientMessageService clientMessageService;
+
+    Logger logger = LoggerFactory.getLogger(OrchestrateService.class);
 
     /**
      * Method to process message between 2 players

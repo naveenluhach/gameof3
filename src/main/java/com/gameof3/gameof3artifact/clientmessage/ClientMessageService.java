@@ -4,6 +4,8 @@ import com.gameof3.gameof3artifact.chat.PlayerMessageService;
 import com.gameof3.gameof3artifact.chat.ChatNotification;
 import com.gameof3.gameof3artifact.chat.PlayerMessage;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,8 @@ public class ClientMessageService {
      * SimpMessagingTemplate dependency for sending WebSocket messages.
      */
     private final SimpMessagingTemplate messagingTemplate;
+
+    Logger logger = LoggerFactory.getLogger(ClientMessageService.class);
 
     /**
      * Sends a game started message to the specified player.

@@ -49,9 +49,4 @@ public class PlayerMessage {
      * Timestamp indicating when the message was sent.
      */
     private Date timestamp;
-
-    /**
-     * Identifier for the game associated with this message.
-     */
-    private String gameId;
 }

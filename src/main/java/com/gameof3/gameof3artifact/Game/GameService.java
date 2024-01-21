@@ -2,6 +2,8 @@ package com.gameof3.gameof3artifact.Game;
 
 import com.gameof3.gameof3artifact.chat.PlayerMessage;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,8 +14,11 @@ import java.util.List;
  * Service class for managing game-related operations.
  */
 public class GameService {
+
     private final GameRepository gameRepository;
     private final PlayerModeRepository gameModeRepository;
+
+    Logger logger = LoggerFactory.getLogger(GameService.class);
 
     /**
      * Marks the provided game as active.

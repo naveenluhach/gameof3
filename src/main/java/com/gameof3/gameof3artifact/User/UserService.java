@@ -1,6 +1,8 @@
 package com.gameof3.gameof3artifact.User;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,7 +14,12 @@ import java.util.List;
  */
 public class UserService {
 
-    private final UserRepository repository;  // Repository for accessing and manipulating User entities
+    /**
+     * Repository for accessing and manipulating User entities
+     */
+    private final UserRepository repository;
+
+    Logger logger = LoggerFactory.getLogger(UserService.class);
 
     /**
      * Saves a new user with the specified status as online.

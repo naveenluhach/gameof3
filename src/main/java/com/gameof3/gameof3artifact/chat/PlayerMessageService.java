@@ -3,6 +3,8 @@ package com.gameof3.gameof3artifact.chat;
 import com.gameof3.gameof3artifact.ChatRoom.ChatRoom;
 import com.gameof3.gameof3artifact.ChatRoom.ChatRoomService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,6 +25,8 @@ public class PlayerMessageService {
      */
     private final ChatRoomService chatRoomService;
 
+    Logger logger = LoggerFactory.getLogger(PlayerMessageService.class);
+
     /**
      * Save the chatMessage to DB
      * @param playerMessage
@@ -39,6 +43,7 @@ public class PlayerMessageService {
         }
         playerMessage.setChatId(chatId);
         chatMessageRepository.save(playerMessage);
+        logger.info("Saved a message with details: "+ playerMessage);
         return playerMessage;
     }
 
@@ -51,6 +56,7 @@ public class PlayerMessageService {
     public List<PlayerMessage> findChatMessages(String senderId, String recipientId) {
         String chatRoomId= chatRoomService.checkIfChatRoomIdExists(senderId, recipientId);
         if(!chatRoomId.equals("-1")){
+             logger.info("Found a chatRoomId: "+chatRoomId+" for a request of senderId: "+senderId+" and recipientId: "+recipientId);
              return chatRoomService.findMessages(chatRoomId);
         }else{
             return new ArrayList<>();
@@ -77,8 +83,10 @@ public class PlayerMessageService {
         PlayerMessage lastPlayerMessage = getlastMessage(playerMessage);
         String lastSenderId = lastPlayerMessage.getSenderId();
         if(playerMessage.getSenderId().equals(lastSenderId)){
+            logger.info("Did not found a valid sender for request: "+playerMessage.toString());
             return false;
         }else{
+            logger.info("Found a valid sender for request: "+playerMessage.toString());
             return true;
         }
     }
@@ -115,7 +123,7 @@ public class PlayerMessageService {
      */
     public int getNextMoveNum(PlayerMessage playerMessage){
         int lastNumberbetweenUsers = getLastNumber(playerMessage);
-        System.out.println("last number discussed between users: "+lastNumberbetweenUsers);
+        logger.info("last number discussed between users: "+lastNumberbetweenUsers);
         int remainder = lastNumberbetweenUsers%3;
         int result = 0;
         if (remainder == 0) {
@@ -125,7 +133,7 @@ public class PlayerMessageService {
         }else {
             result = (lastNumberbetweenUsers + 1) / 3;
         }
-        System.out.println("Server num sent"+result);
+        logger.info("Server sent number: "+result+" for request: "+playerMessage.toString());
         return result;
     }
 }

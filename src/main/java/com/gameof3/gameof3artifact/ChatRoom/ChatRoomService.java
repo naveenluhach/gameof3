@@ -3,6 +3,9 @@ package com.gameof3.gameof3artifact.ChatRoom;
 import com.gameof3.gameof3artifact.chat.ChatMessageRepository;
 import com.gameof3.gameof3artifact.chat.PlayerMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +19,8 @@ public class ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
+
+    Logger logger = LoggerFactory.getLogger(ChatRoomService.class);
 
     /**
      * Checks if a chat room exists between the given sender and recipient.
