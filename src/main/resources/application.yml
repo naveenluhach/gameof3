@@ -7,6 +7,10 @@ spring:
       port: 27017
       database: chat_app
       authentication-database: admin
+  profiles:
+    active: dev
 server:
   port: 8088
+
+
 
