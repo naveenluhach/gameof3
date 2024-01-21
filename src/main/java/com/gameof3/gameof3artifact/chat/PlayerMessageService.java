@@ -13,7 +13,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PlayerMessageService {
 
+    /**
+     * ChatMessageRepository dependency for handling chat message-related operations.
+     */
     private final ChatMessageRepository chatMessageRepository;
+
+    /**
+     * ChatRoomService dependency for managing chat rooms and associated operations.
+     */
     private final ChatRoomService chatRoomService;
 
     /**
@@ -36,7 +43,7 @@ public class PlayerMessageService {
     }
 
     /**
-     * Mthod to find the chat messages for a sender
+     * Method to find the chat messages for a sender
      * @param senderId
      * @param recipientId
      * @return
@@ -99,5 +106,26 @@ public class PlayerMessageService {
         Collections.sort(playerMessages, (m1, m2) -> m2.getTimestamp().compareTo(m1.getTimestamp()));
         PlayerMessage latestPlayerMessage = playerMessages.isEmpty() ? null : playerMessages.get(0);
         return latestPlayerMessage;
+    }
+
+    /**
+     * Method to find valid response
+     * @param num
+     * @return
+     */
+    public int getNextMoveNum(PlayerMessage playerMessage){
+        int lastNumberbetweenUsers = getLastNumber(playerMessage);
+        System.out.println("last number discussed between users: "+lastNumberbetweenUsers);
+        int remainder = lastNumberbetweenUsers%3;
+        int result = 0;
+        if (remainder == 0) {
+            result = lastNumberbetweenUsers/3;
+        } else if (remainder == 1) {
+            result = (lastNumberbetweenUsers - 1)/3;
+        }else {
+            result = (lastNumberbetweenUsers + 1) / 3;
+        }
+        System.out.println("Server num sent"+result);
+        return result;
     }
 }
