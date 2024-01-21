@@ -36,4 +36,44 @@ public class ChatRoom {
      * User ID of the recipient in the chat room
      */
     private String recipientId;
+
+    public String getId() {
+        return id;
+    }
+
+    private void setId(String id) {
+        this.id = id;
+    }
+
+    public String getChatId() {
+        return chatId;
+    }
+
+    private void setChatId(String chatId) {
+        this.chatId = chatId;
+    }
+
+    public String getSenderId() {
+        return senderId;
+    }
+
+    private void setSenderId(String senderId) {
+        this.senderId = senderId;
+    }
+
+    public String getRecipientId() {
+        return recipientId;
+    }
+
+    private void setRecipientId(String recipientId) {
+        this.recipientId = recipientId;
+    }
+
+    public static ChatRoom create(String chatId, String senderId, String recipientId){
+        ChatRoom chatRoom = new ChatRoom();
+        chatRoom.setChatId(chatId);
+        chatRoom.setSenderId(senderId);
+        chatRoom.setRecipientId(recipientId);
+        return chatRoom;
+    }
 }

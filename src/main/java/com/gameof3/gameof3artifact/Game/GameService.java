@@ -27,9 +27,9 @@ public class GameService {
      * @return The updated game object
      */
     public Game markActive(Game game){
-        game.setGameStatus("active");
-        gameRepository.save(game);
-        return game;
+        Game activeGame = Game.updateStatus(game, "active");
+        gameRepository.save(activeGame);
+        return activeGame;
     }
 
     /**
@@ -39,9 +39,9 @@ public class GameService {
      * @return The updated game object
      */
     public Game markOver(Game game){
-        game.setGameStatus("over");
-        gameRepository.save(game);
-        return game;
+        Game modifiedGame = Game.updateStatus(game, "over");
+        gameRepository.save(modifiedGame);
+        return modifiedGame;
     }
 
     /**
@@ -67,11 +67,8 @@ public class GameService {
      * @param playerMessage The PlayerMessage containing information to start a new game
      */
     public void startNewGame(PlayerMessage playerMessage){
-        Game game = new Game();
-        game.setPlayer1(playerMessage.getSenderId());
-        game.setPlayer2(playerMessage.getRecipientId());
-        game.setChatId(playerMessage.getChatId());
-        markActive(game);
+        Game newGame = Game.create(playerMessage.getSenderId(), playerMessage.getRecipientId(), playerMessage.getChatId());
+        markActive(newGame);
     }
 
     /**
@@ -79,8 +76,8 @@ public class GameService {
      * @param game The game to be marked as over
      */
     public void completeGame(Game game){
-        game.setGameStatus("over");
-        markOver(game);
+        Game modifiedgame = Game.updateStatus(game, "over");
+        markOver(modifiedgame);
     }
 
     /**

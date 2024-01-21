@@ -39,17 +39,60 @@ public class Game {
     private String player2;
 
     /**
-     * Mode of player 1 in the game.
-     */
-    private String player1Mode;
-
-    /**
-     * Mode of player 2 in the game.
-     */
-    private String player2Mode;
-
-    /**
      * Identifier for the chat associated with this game.
      */
     private String chatId;
+
+    public String getId() {
+        return id;
+    }
+
+    private void setId(String id) {
+        this.id = id;
+    }
+
+    public String getGameStatus() {
+        return gameStatus;
+    }
+
+    private void setGameStatus(String gameStatus) {
+        this.gameStatus = gameStatus;
+    }
+
+    public String getPlayer1() {
+        return player1;
+    }
+
+    private void setPlayer1(String player1) {
+        this.player1 = player1;
+    }
+
+    public String getPlayer2() {
+        return player2;
+    }
+
+    private void setPlayer2(String player2) {
+        this.player2 = player2;
+    }
+
+    public String getChatId() {
+        return chatId;
+    }
+
+    private void setChatId(String chatId) {
+        this.chatId = chatId;
+    }
+
+    public static Game create(String player1, String player2, String chatId){
+        Game game = new Game();
+        game.setPlayer1(player1);
+        game.setPlayer2(player2);
+        game.setChatId(chatId);
+        return game;
+    }
+
+    public static Game updateStatus(Game game, String gameStatus){
+        game.setGameStatus(gameStatus);
+        return game;
+    }
 }
