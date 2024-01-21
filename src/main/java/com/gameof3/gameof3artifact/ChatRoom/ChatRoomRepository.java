@@ -12,15 +12,6 @@ import java.util.Optional;
 public interface ChatRoomRepository extends MongoRepository<ChatRoom, String> {
 
     /**
-     * Finds a chat room by senderId and recipientId using Spring Data JPA conventions.
-     *
-     * @param senderId    User ID of the sender.
-     * @param recipientId User ID of the recipient.
-     * @return Optional containing the ChatRoom entity if found.
-     */
-    Optional<ChatRoom> findBySenderIdAndRecipientId(String senderId, String recipientId);
-
-    /**
      * Custom query to find a chat room by senderId and recipientId.
      *
      * @param senderId    User ID of the sender.
