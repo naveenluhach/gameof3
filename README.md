@@ -83,3 +83,10 @@ Step 9: Toggle the mode from the UI and make sure it matches the Step 3 API. (TO
 
 
 
+
+**Common issues**
+1. Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+Resulution: Perform step 2.
+
+
+
