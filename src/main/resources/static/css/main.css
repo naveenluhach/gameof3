@@ -244,7 +244,7 @@ a.logout {
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background-color: #f3a221;
 }
 
 input:focus + .slider {
