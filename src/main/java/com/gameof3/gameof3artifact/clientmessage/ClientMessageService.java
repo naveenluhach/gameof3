@@ -78,7 +78,6 @@ public class ClientMessageService {
         newPlayerMessage.setRecipientId(playerMessage.getSenderId());
         newPlayerMessage.setTimestamp(new Date());
         newPlayerMessage.setChatId(playerMessage.getChatId());
-        //Message savedMsg = chatMessageService.saveNew(newMessage);//"Wait for my turn"
         sendMessageToClient(newPlayerMessage);
     }
 
@@ -111,53 +110,6 @@ public class ClientMessageService {
         newPlayerMessage.setTimestamp(new Date());
         // Message savedMsg = chatMessageService.saveNew(newMessage);//"Please send valid number to continue the game"
         sendMessageToClient(newPlayerMessage);
-    }
-
-    public void sendAutomaticMessage(PlayerMessage chatPlayerMessage) {
-        PlayerMessage newPlayerMessage = new PlayerMessage();
-        newPlayerMessage.setContent("Automated message from "+ chatPlayerMessage.getRecipientId());
-        newPlayerMessage.setSenderId(chatPlayerMessage.getRecipientId());// on behalf of recipient
-        newPlayerMessage.setRecipientId(chatPlayerMessage.getSenderId());
-        newPlayerMessage.setTimestamp(new Date());
-        PlayerMessage savedMsg = playerMessageService.saveNew(newPlayerMessage);//"Please send valid number to continue the game"
-        sendMessageToClient(newPlayerMessage);
-    }
-
-    public void sendAutomaticNumberMessage(PlayerMessage playerMessage) {
-        PlayerMessage newPlayerMessage = new PlayerMessage();
-        int number = playerMessageService.processMessage(playerMessage);
-        newPlayerMessage.setContent(String.valueOf(getNextMoveNum(number)));
-        newPlayerMessage.setSenderId(playerMessage.getRecipientId());// on behalf of recipient
-        newPlayerMessage.setRecipientId(playerMessage.getSenderId());
-        newPlayerMessage.setTimestamp(new Date());
-        PlayerMessage savedMsg = playerMessageService.saveNew(newPlayerMessage);//"auto num"
-        sendMessageToClient(savedMsg);
-    }
-
-    public void sendRandomNumberMessage(PlayerMessage playerMessage, String randomNumberContent){
-        PlayerMessage newPlayerMessage = new PlayerMessage();
-        int number = playerMessageService.processMessage(playerMessage);
-        newPlayerMessage.setContent(randomNumberContent);
-        newPlayerMessage.setSenderId(playerMessage.getSenderId());
-        newPlayerMessage.setRecipientId(playerMessage.getRecipientId());
-        newPlayerMessage.setTimestamp(new Date());
-        PlayerMessage savedMsg = playerMessageService.saveNew(newPlayerMessage);//"auto num"
-        sendMessageToClient(savedMsg);
-    }
-
-    public int getNextMoveNum(int num){
-        System.out.println("Server num received"+num);
-        int remainder = num%3;
-        int result = 0;
-        if (remainder == 0) {
-            result = num/3;
-        } else if (remainder == 1) {
-            result = (num - 1)/3;
-        }else {
-            result = (num + 1) / 3;
-        }
-        System.out.println("Server num sent"+result);
-        return result;
     }
 
     private int sendMessageToClient(PlayerMessage savedMsg){

@@ -12,7 +12,7 @@ const logout = document.querySelector('#logout');
 const toggleSwitch = document.getElementById('toggleSwitch');
 
 // Set its initial value to true (checked)
-let isAutomaticResponseEnabled = true;
+let isAutomaticResponseEnabled = false;
 
 let stompClient = null;
 let nickname = null;
