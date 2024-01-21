@@ -18,7 +18,10 @@ import java.util.List;
  */
 public class ChatController {
 
+    // PlayerMessageService dependency for handling player message related operations
     private final PlayerMessageService playerMessageService;
+
+    // OrchestrateService dependency for orchestrating and coordinating game-related operations
     private final OrchestrateService orchestrateService;
 
     /**

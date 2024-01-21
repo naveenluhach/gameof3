@@ -9,13 +9,20 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+/**
+ * Service class for managing chat rooms and messages.
+ */
 public class ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
 
-    /*
-    method to check if chat room exists or not
+    /**
+     * Checks if a chat room exists between the given sender and recipient.
+     * Returns the chat ID if the chat room exists, otherwise returns "-1".
+     * @param senderId The ID of the sender
+     * @param recipientId The ID of the recipient
+     * @return The chat ID if the chat room exists, otherwise "-1"
      */
     public String checkIfChatRoomIdExists(String senderId, String recipientId) {
         ChatRoom chatRoom = chatRoomRepository.findBySenderIdAndRecipientIdcustom(senderId, recipientId);
@@ -25,15 +32,22 @@ public class ChatRoomService {
         return chatRoom.getChatId();
     }
 
-    /*
-    method to find chat room id
+    /**
+     * Finds the chat room ID between the given sender and recipient.
+     * @param senderId The ID of the sender
+     * @param recipientId The ID of the recipient
+     * @return The chat room ID if found, otherwise null
      */
     public ChatRoom findChatRoomId(String senderId, String recipientId){
         return chatRoomRepository.findBySenderIdAndRecipientIdcustom(senderId, recipientId);
     }
 
-    /*
-    method to get or create chat id
+    /**
+     * Gets or creates a chat ID between the sender and recipient.
+     * If the chat room exists, returns its ID. Otherwise, creates a new chat room and returns its ID.
+     * @param senderId The ID of the sender
+     * @param recipientId The ID of the recipient
+     * @return The chat ID
      */
     public String getOrCreateChatId(String senderId, String recepientId){
         var chatId = "";
@@ -48,16 +62,21 @@ public class ChatRoomService {
         return chatId;
     }
 
-    /*
-    method to find all chat messages of a chat room
+    /**
+     * Finds all chat messages of a chat room based on the provided chatRoomId.
+     * @param chatRoomId The ID of the chat room
+     * @return List of chat messages
      */
     public List<PlayerMessage> findMessages(String chatRoomId){
         return chatMessageRepository.findByChatId(chatRoomId);
     }
 
-
-    /*
-    method to create chat id
+    /**
+     * Creates a chat ID between the sender and recipient.
+     * Creates two chat room entities for sender-to-recipient and recipient-to-sender communication.
+     * @param senderId The ID of the sender
+     * @param recipientId The ID of the recipient
+     * @return The created chat ID
      */
     public String createChatId(String senderId, String recipientId) {
         var chatId = String.format("%s_%s", senderId, recipientId);
