@@ -24,6 +24,10 @@ public class ClientMessageService {
      */
     private final SimpMessagingTemplate messagingTemplate;
 
+    /**
+     * Sends a game started message to the specified player.
+     * @param playerMessage The player message triggering the game started event.
+     */
     public void sendGameStartedMessage(PlayerMessage playerMessage){
         String content = "Game has started by "+ playerMessage.getSenderId();
         PlayerMessage messageToSend = getMessageToSend(content, playerMessage.getSenderId(), playerMessage.getRecipientId(), playerMessage.getChatId());
@@ -31,6 +35,10 @@ public class ClientMessageService {
         sendMessageToClient(persistedMessage);
     }
 
+    /**
+     * Sends a message containing a randomly generated number to the specified player.
+     * @param playerMessage The player message triggering the random number event.
+     */
     public void sendRandomNumberMessage(PlayerMessage playerMessage){
         int randomNumber = generateRandomNumber();
         String randomNumContent = getRandomNumContent(randomNumber);
@@ -39,6 +47,10 @@ public class ClientMessageService {
         sendMessageToClient(persistedMessage);
     }
 
+    /**
+     * Sends a message notifying the player about an invalid number.
+     * @param chatPlayerMessage The player message with an invalid number.
+     */
     public void sendInvalidNumberMessage(PlayerMessage chatPlayerMessage){
         playerMessageService.save(chatPlayerMessage);
         String content = "Please send -1 to start the game";
@@ -47,6 +59,10 @@ public class ClientMessageService {
         sendMessageToClient(persistedMessage);
     }
 
+    /**
+     * Sends a message notifying the player about an invalid sender.
+     * @param playerMessage The player message with an invalid sender.
+     */
     public void sendInvalidSenderMessage(PlayerMessage playerMessage){
         // We do not persist it because it will make the last message number logic complex for now
         // chatMessageService.saveNew(chatMessage);
@@ -55,6 +71,10 @@ public class ClientMessageService {
         sendMessageToClient(messageToSend);// only send
     }
 
+    /**
+     * Sends a message notifying the players about the game result.
+     * @param chatPlayerMessage The player message containing the game result.
+     */
     public void sendGameResultMessage(PlayerMessage chatPlayerMessage){
         String content = "Game won by "+ chatPlayerMessage.getSenderId();
         PlayerMessage messageToSend = getMessageToSendWOChatId(content, chatPlayerMessage.getSenderId(), chatPlayerMessage.getRecipientId());
@@ -62,11 +82,20 @@ public class ClientMessageService {
         sendMessageToClient(gameOverPlayerMessage);// save and send
     }
 
+    /**
+     * Sends a regular message to the specified player.
+     * @param playerMessage The regular player message to be sent.
+     */
     public void sendRegularMessage(PlayerMessage playerMessage){
         PlayerMessage savedMsg = playerMessageService.save(playerMessage);
         sendMessageToClient(savedMsg);// only send
     }
 
+    /**
+     * Sends a regular invalid message to the specified player.
+     * @param chatPlayerMessage The player message triggering the invalid message event.
+     * @param playerNumber The invalid player number.
+     */
     public void sendRegularInvalidMessage(PlayerMessage chatPlayerMessage, int playerNumber){
         String content = "Please send a valid number to continue the game. "+playerNumber+" is not a valid";
         PlayerMessage messageToSend = getMessageToSendWOChatId(content, chatPlayerMessage.getRecipientId(), chatPlayerMessage.getSenderId());
@@ -75,6 +104,11 @@ public class ClientMessageService {
         sendMessageToClient(messageToSend);
     }
 
+    /**
+     * Sends a message to the client using WebSocket.
+     * @param savedMsg The player message to be sent to the client.
+     * @return An integer indicating the success of the operation.
+     */
     private int sendMessageToClient(PlayerMessage savedMsg){
         messagingTemplate.convertAndSendToUser(
                 savedMsg.getRecipientId(), "/queue/messages",
@@ -88,6 +122,10 @@ public class ClientMessageService {
         return 1;
     }
 
+    /**
+     * Generates a random number between 0 and 999.
+     * @return The randomly generated number.
+     */
     private int generateRandomNumber(){
         Random rand = new Random();
         // Generate random integers in range 0 to 999
@@ -95,10 +133,23 @@ public class ClientMessageService {
         return randomNumber;
     }
 
+    /**
+     * Generates the content for a message containing a random number.
+     * @param randomNumber The randomly generated number.
+     * @return The content for the message.
+     */
     private String getRandomNumContent(int randomNumber){
         return String.valueOf(randomNumber);
     }
 
+    /**
+     * Creates a PlayerMessage with the specified content and details.
+     * @param content The content of the message.
+     * @param senderId The ID of the message sender.
+     * @param recipientId The ID of the message recipient.
+     * @param chatId The ID of the chat.
+     * @return The created PlayerMessage.
+     */
     private PlayerMessage getMessageToSend(String content, String senderId, String recipientId, String chatId){
         PlayerMessage messageToSend = new PlayerMessage();
         messageToSend.setContent(content);
@@ -109,6 +160,13 @@ public class ClientMessageService {
         return messageToSend;
     }
 
+    /**
+     * Creates a PlayerMessage without a chat ID.
+     * @param content The content of the message.
+     * @param senderId The ID of the message sender.
+     * @param recipientId The ID of the message recipient.
+     * @return The created PlayerMessage.
+     */
     private PlayerMessage getMessageToSendWOChatId(String content, String senderId, String recipientId){
         PlayerMessage messageToSend = new PlayerMessage();
         messageToSend.setContent(content);
