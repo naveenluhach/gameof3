@@ -50,7 +50,7 @@ Install Docker
 Step 2:
 Run Docker 
 
-Step 3: docker-compose up
+Step 3: docker-compose up in the project directory once you clone it.
 
 
 Step 4:
