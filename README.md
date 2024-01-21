@@ -52,11 +52,25 @@ Run Docker
 
 Step 3: docker-compose up
 
+
 Step 4:
+Check if you can see mongo db data at: http://localhost:8081/db/chat_app/
+
+Step 5: 
+Run spring boot application.
+
+Step 6:
+Go to http://localhost:8088/ and enter:
+For 1st player: user1 for both real name and nick name.
+For 2nd player: user2 for both real name and nick name.
+
+Step 7: Only when you press -1, game will start.
+
+Step 8: Toggle the mode from the UI, initial mode is manual always. (TODO: Integration of Client Toggle UI Button with Backend API so that we can fetch the last mode of user)
+Backend API developed for the same to create/edit mode:
 
 Set players mode using API to either: auto/man for both players.
 For simplicity: use - user1 and user2
-
 
 curl --location --request PUT 'http://localhost:8088/playerMode' \
 --header 'Content-Type: application/json' \
@@ -65,22 +79,6 @@ curl --location --request PUT 'http://localhost:8088/playerMode' \
     "player": "user2",
     "playerMode": "auto"
 }'
-
-Step 5:
-Check if you can see mongo db data at: http://localhost:8081/db/chat_app/
-
-Step 6: 
-Run spring boot application.
-
-Step 7:
-Go to http://localhost:8088/ and enter:
-For 1st player: user1 for both real name and nick name.
-For 2nd player: user2 for both real name and nick name.
-
-Step 8: Only when you press -1, game will start.
-
-Step 9: Toggle the mode from the UI and make sure it matches the Step 3 API. (TODO: Integration of Client Toggle UI Button with Backend API)
-
 
 
 
