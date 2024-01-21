@@ -64,7 +64,7 @@ public class OrchestrateService {
                     if(playerNumber==1){
 
                         // Send : 1
-                        clientMessageService.sendLastMessage(playerMessage);
+                        clientMessageService.sendRegularMessage(playerMessage);
                         // Send : Game won by playerMessage.getSenderId()
                         clientMessageService.sendGameResultMessage(playerMessage);
                         // Mark the game over

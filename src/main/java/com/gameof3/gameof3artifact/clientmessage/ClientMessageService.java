@@ -31,12 +31,8 @@ public class ClientMessageService {
      */
 
     public void sendGameStartedMessage(PlayerMessage playerMessage){
-        PlayerMessage messageToSend = new PlayerMessage();
-        messageToSend.setContent("Game has started by "+ playerMessage.getSenderId());
-        messageToSend.setSenderId(playerMessage.getSenderId());
-        messageToSend.setRecipientId(playerMessage.getRecipientId());
-        messageToSend.setTimestamp(new Date());
-        messageToSend.setChatId(playerMessage.getChatId());
+        String content = "Game has started by "+ playerMessage.getSenderId();
+        PlayerMessage messageToSend = getMessageToSend(content, playerMessage.getSenderId(), playerMessage.getRecipientId(), playerMessage.getChatId());
         PlayerMessage persistedMessage = playerMessageService.save(messageToSend);
         sendMessageToClient(persistedMessage);
     }
@@ -44,68 +40,52 @@ public class ClientMessageService {
     public void sendRandomNumberMessage(PlayerMessage playerMessage){
         int randomNumber = generateRandomNumber();
         String randomNumContent = getRandomNumContent(randomNumber);
-        PlayerMessage messageToSend = new PlayerMessage();
-        messageToSend.setContent(randomNumContent);
-        messageToSend.setSenderId(playerMessage.getSenderId());
-        messageToSend.setRecipientId(playerMessage.getRecipientId());
-        messageToSend.setTimestamp(new Date());
-        messageToSend.setChatId(playerMessage.getChatId());
+        PlayerMessage messageToSend = getMessageToSend(randomNumContent, playerMessage.getSenderId(), playerMessage.getRecipientId(), playerMessage.getChatId());
         PlayerMessage persistedMessage = playerMessageService.save(messageToSend);
         sendMessageToClient(persistedMessage);
     }
 
     public void sendInvalidNumberMessage(PlayerMessage chatPlayerMessage){
         playerMessageService.save(chatPlayerMessage);
-        PlayerMessage messageToSend = new PlayerMessage();
-        messageToSend.setContent("Please send -1 to start the game");
-        messageToSend.setSenderId(chatPlayerMessage.getRecipientId());// on behalf of recipient
-        messageToSend.setRecipientId(chatPlayerMessage.getSenderId());
-        messageToSend.setTimestamp(new Date());
-        messageToSend.setChatId(chatPlayerMessage.getChatId());
+        String content = "Please send -1 to start the game";
+        PlayerMessage messageToSend = getMessageToSend(content, chatPlayerMessage.getRecipientId(), chatPlayerMessage.getSenderId(), chatPlayerMessage.getChatId());
         PlayerMessage persistedMessage = playerMessageService.save(messageToSend);//"Please send -1 to start the game"
         sendMessageToClient(persistedMessage);
     }
 
     public void sendInvalidSenderMessage(PlayerMessage playerMessage){
-        //chatMessageService.saveNew(chatMessage);
-        PlayerMessage messageToSend = new PlayerMessage();
-        messageToSend.setContent("Wait for my turn");
-        messageToSend.setSenderId(playerMessage.getRecipientId());// on behalf of recipient
-        messageToSend.setRecipientId(playerMessage.getSenderId());
-        messageToSend.setTimestamp(new Date());
-        messageToSend.setChatId(playerMessage.getChatId());
-        sendMessageToClient(messageToSend);
-    }
-
-    public void sendLastMessage(PlayerMessage playerMessage){
-        PlayerMessage savedMsg = playerMessageService.save(playerMessage);
-        sendMessageToClient(savedMsg);
+        // We do not persist it because it will make the last message number logic complex for now
+        // chatMessageService.saveNew(chatMessage);
+        String content =  "Wait for my turn";
+        PlayerMessage messageToSend = getMessageToSend(content, playerMessage.getRecipientId(), playerMessage.getSenderId(), playerMessage.getChatId());
+        sendMessageToClient(messageToSend);// only send
     }
 
     public void sendGameResultMessage(PlayerMessage chatPlayerMessage){
         PlayerMessage messageToSend = new PlayerMessage();
-        messageToSend.setContent("Game won by "+ chatPlayerMessage.getSenderId());
+        String content = "Game won by "+ chatPlayerMessage.getSenderId();
+        messageToSend.setContent(content);
         messageToSend.setSenderId(chatPlayerMessage.getSenderId());
         messageToSend.setRecipientId(chatPlayerMessage.getRecipientId());
         messageToSend.setTimestamp(new Date());
-        PlayerMessage gameOverPlayerMessage = playerMessageService.save(messageToSend);//"Game over"
-        sendMessageToClient(gameOverPlayerMessage);
+        // we need chat id during saving an extra message
+        PlayerMessage gameOverPlayerMessage = playerMessageService.save(messageToSend);
+        sendMessageToClient(gameOverPlayerMessage);// save and send
     }
 
     public void sendRegularMessage(PlayerMessage playerMessage){
         PlayerMessage savedMsg = playerMessageService.save(playerMessage);
-        System.out.println("Message sent:"+ savedMsg.getContent());
-        sendMessageToClient(savedMsg);
+        sendMessageToClient(savedMsg);// only send
     }
 
     public void sendRegularInvalidMessage(PlayerMessage chatPlayerMessage, int playerNumber){
         PlayerMessage messageToSend = new PlayerMessage();
         messageToSend.setContent("Please send a valid number to continue the game. "+playerNumber+" is not a valid number");
-        messageToSend.setSenderId(chatPlayerMessage.getRecipientId());// on behalf of recipient
+        messageToSend.setSenderId(chatPlayerMessage.getRecipientId());
         messageToSend.setRecipientId(chatPlayerMessage.getSenderId());
         messageToSend.setTimestamp(new Date());
         // Message savedMsg = chatMessageService.saveNew(newMessage);//"Please send valid number to continue the game"
-        sendMessageToClient(messageToSend);
+        sendMessageToClient(messageToSend);// only send
     }
 
     private int sendMessageToClient(PlayerMessage savedMsg){
@@ -130,5 +110,15 @@ public class ClientMessageService {
 
     private String getRandomNumContent(int randomNumber){
         return String.valueOf(randomNumber);
+    }
+
+    private PlayerMessage getMessageToSend(String content, String senderId, String recipientId, String chatId){
+        PlayerMessage messageToSend = new PlayerMessage();
+        messageToSend.setContent(content);
+        messageToSend.setSenderId(senderId);
+        messageToSend.setRecipientId(recipientId);
+        messageToSend.setTimestamp(new Date());
+        messageToSend.setChatId(chatId);
+        return messageToSend;
     }
 }
