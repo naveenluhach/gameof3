@@ -41,10 +41,10 @@ public class PlayerMessageService {
         }else{
             chatId = chatRoomService.createChatId(playerMessage.getSenderId(), playerMessage.getRecipientId());
         }
-        playerMessage.setChatId(chatId);
-        chatMessageRepository.save(playerMessage);
-        logger.info("Saved a message with details: "+ playerMessage);
-        return playerMessage;
+        PlayerMessage modifiedPlayerMessage = playerMessage.updateChatId(playerMessage, chatId);
+        chatMessageRepository.save(modifiedPlayerMessage);
+        logger.info("Saved a message with details: "+ modifiedPlayerMessage);
+        return modifiedPlayerMessage;
     }
 
     /**

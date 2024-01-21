@@ -155,12 +155,8 @@ public class ClientMessageService {
      * @return The created PlayerMessage.
      */
     private PlayerMessage getMessageToSend(String content, String senderId, String recipientId, String chatId){
-        PlayerMessage messageToSend = new PlayerMessage();
-        messageToSend.setContent(content);
-        messageToSend.setSenderId(senderId);
-        messageToSend.setRecipientId(recipientId);
-        messageToSend.setTimestamp(new Date());
-        messageToSend.setChatId(chatId);
+        PlayerMessage messageToSend = PlayerMessage.create(content, senderId, recipientId);
+        messageToSend.updateChatId(messageToSend, chatId);
         return messageToSend;
     }
 
@@ -172,11 +168,7 @@ public class ClientMessageService {
      * @return The created PlayerMessage.
      */
     private PlayerMessage getMessageToSendWOChatId(String content, String senderId, String recipientId){
-        PlayerMessage messageToSend = new PlayerMessage();
-        messageToSend.setContent(content);
-        messageToSend.setSenderId(senderId);
-        messageToSend.setRecipientId(recipientId);
-        messageToSend.setTimestamp(new Date());
+        PlayerMessage messageToSend = PlayerMessage.create(content, senderId, recipientId);
         return messageToSend;
     }
 }
