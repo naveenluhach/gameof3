@@ -14,7 +14,7 @@ import java.util.Optional;
 @NoArgsConstructor
 @Builder
 @Document
-public class Message {
+public class PlayerMessage {
     @Id
     private String id;
     private String chatId;

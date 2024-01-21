@@ -1,12 +1,11 @@
 package com.gameof3.gameof3artifact.ChatRoom;
 
 import com.gameof3.gameof3artifact.chat.ChatMessageRepository;
-import com.gameof3.gameof3artifact.chat.Message;
+import com.gameof3.gameof3artifact.chat.PlayerMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -52,7 +51,7 @@ public class ChatRoomService {
     /*
     method to find all chat messages of a chat room
      */
-    public List<Message> findMessages(String chatRoomId){
+    public List<PlayerMessage> findMessages(String chatRoomId){
         return chatMessageRepository.findByChatId(chatRoomId);
     }
 

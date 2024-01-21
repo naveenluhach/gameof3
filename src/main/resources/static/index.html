@@ -8,10 +8,10 @@
 </head>
 <body>
 
-<h2>Game of 3 </h2>
+<h2>Game of three</h2>
 
 <div class="user-form" id="username-page">
-    <h2>Login Page</h2>
+    <h2>Enter Game</h2>
     <form id="usernameForm">
         <label for="nickname">Nickname:</label>
         <input type="text" id="nickname" name="nickname" required>
@@ -30,23 +30,10 @@
             <ul id="connectedUsers">
             </ul>
         </div>
-        <!-- Add a div for the toggle slider -->
-        <!--<div class="toggle-slider-container">
-            <label class="switch">
-                <span class="toggle-name">Automate</span>
-                <input type="checkbox" id="toggleSwitch" checked>
-                <span class="slider round"></span>
-            </label>
-        </div>-->
-
-        <div class="toggle-container">
-            <span>Man - Auto</span>
-            <label class="switch">
-                <input type="checkbox" id="toggleSwitch" checked>
-                <span class="slider round"></span>
-            </label>
-        </div>
-
+        <label class="switch">
+            <input type="checkbox" id="toggleSwitch">
+            <span class="slider round"></span>
+        </label>
         <div>
             <p id="connected-user-fullname"></p>
             <a class="logout" href="javascript:void(0)" id="logout">Logout</a>
@@ -59,7 +46,7 @@
 
         <form id="messageForm" name="messageForm" class="hidden">
             <div class="message-input">
-                <input autocomplete="off" type="number" id="message" placeholder="Type your message...">
+                <input autocomplete="off" type="text" id="message" placeholder="Type your message...">
                 <button>Send</button>
             </div>
         </form>

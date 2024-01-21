@@ -2,7 +2,7 @@ package com.gameof3.gameof3artifact.Game;
 
 import com.gameof3.gameof3artifact.ChatRoom.ChatRoomService;
 import com.gameof3.gameof3artifact.chat.ChatMessageRepository;
-import com.gameof3.gameof3artifact.chat.Message;
+import com.gameof3.gameof3artifact.chat.PlayerMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -40,11 +40,11 @@ public class GameService {
         return activeGame;
     }
 
-    public void startNewGame(Message message){
+    public void startNewGame(PlayerMessage playerMessage){
         Game game = new Game();
-        game.setPlayer1(message.getSenderId());
-        game.setPlayer2(message.getRecipientId());
-        game.setChatId(message.getChatId());
+        game.setPlayer1(playerMessage.getSenderId());
+        game.setPlayer2(playerMessage.getRecipientId());
+        game.setChatId(playerMessage.getChatId());
         markActive(game);
     }
 

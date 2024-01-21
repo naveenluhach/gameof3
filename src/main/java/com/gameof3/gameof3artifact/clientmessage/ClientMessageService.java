@@ -2,7 +2,7 @@ package com.gameof3.gameof3artifact.clientmessage;
 
 import com.gameof3.gameof3artifact.chat.ChatMessageService;
 import com.gameof3.gameof3artifact.chat.ChatNotification;
-import com.gameof3.gameof3artifact.chat.Message;
+import com.gameof3.gameof3artifact.chat.PlayerMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -17,107 +17,107 @@ public class ClientMessageService {
     private final ChatMessageService chatMessageService;
     private final SimpMessagingTemplate messagingTemplate;
 
-    public void sendGameStartedMessage(Message chatMessage){
-        Message gameOverMessage = new Message();
-        gameOverMessage.setContent("Game has started by "+chatMessage.getSenderId());
-        gameOverMessage.setSenderId(chatMessage.getSenderId());
-        gameOverMessage.setRecipientId(chatMessage.getRecipientId());
-        gameOverMessage.setTimestamp(new Date());
-        gameOverMessage.setChatId(chatMessage.getChatId());
-        Message savedMsg = chatMessageService.saveNew(gameOverMessage);
-        sendMessageToClient(chatMessage, savedMsg);
+    public void sendGameStartedMessage(PlayerMessage chatPlayerMessage){
+        PlayerMessage gameOverPlayerMessage = new PlayerMessage();
+        gameOverPlayerMessage.setContent("Game has started by "+ chatPlayerMessage.getSenderId());
+        gameOverPlayerMessage.setSenderId(chatPlayerMessage.getSenderId());
+        gameOverPlayerMessage.setRecipientId(chatPlayerMessage.getRecipientId());
+        gameOverPlayerMessage.setTimestamp(new Date());
+        gameOverPlayerMessage.setChatId(chatPlayerMessage.getChatId());
+        PlayerMessage savedMsg = chatMessageService.saveNew(gameOverPlayerMessage);
+        sendMessageToClient(chatPlayerMessage, savedMsg);
     }
 
-    public String sendRandomNumberMessage(Message chatMessage){
+    public String sendRandomNumberMessage(PlayerMessage chatPlayerMessage){
         Random rand = new Random();
         // Generate random integers in range 0 to 999
         int randomNumber = rand.nextInt(1000);
-        Message randomNumberMsg = new Message();
+        PlayerMessage randomNumberMsg = new PlayerMessage();
         String randomNumContent = String.valueOf(randomNumber);
         randomNumberMsg.setContent(randomNumContent);
-        randomNumberMsg.setSenderId(chatMessage.getSenderId());
-        randomNumberMsg.setRecipientId(chatMessage.getRecipientId());
+        randomNumberMsg.setSenderId(chatPlayerMessage.getSenderId());
+        randomNumberMsg.setRecipientId(chatPlayerMessage.getRecipientId());
         randomNumberMsg.setTimestamp(new Date());
-        randomNumberMsg.setChatId(chatMessage.getChatId());
-        Message savedMsg = chatMessageService.saveNew(randomNumberMsg);
-        sendMessageToClient(chatMessage, savedMsg);
+        randomNumberMsg.setChatId(chatPlayerMessage.getChatId());
+        PlayerMessage savedMsg = chatMessageService.saveNew(randomNumberMsg);
+        sendMessageToClient(chatPlayerMessage, savedMsg);
         return randomNumContent;
     }
 
-    public void sendInvalidNumberMessage(Message chatMessage){
-        chatMessageService.saveNew(chatMessage);
-        Message newMessage = new Message();
-        newMessage.setContent("Please send -1 to start the game");
-        newMessage.setSenderId(chatMessage.getRecipientId());// on behalf of recipient
-        newMessage.setRecipientId(chatMessage.getSenderId());
-        newMessage.setChatId(chatMessage.getChatId());
-        newMessage.setTimestamp(new Date());
-        Message savedMsg = chatMessageService.saveNew(newMessage);//"Please send -1 to start the game"
-        sendMessageToClient(chatMessage, savedMsg);
+    public void sendInvalidNumberMessage(PlayerMessage chatPlayerMessage){
+        chatMessageService.saveNew(chatPlayerMessage);
+        PlayerMessage newPlayerMessage = new PlayerMessage();
+        newPlayerMessage.setContent("Please send -1 to start the game");
+        newPlayerMessage.setSenderId(chatPlayerMessage.getRecipientId());// on behalf of recipient
+        newPlayerMessage.setRecipientId(chatPlayerMessage.getSenderId());
+        newPlayerMessage.setChatId(chatPlayerMessage.getChatId());
+        newPlayerMessage.setTimestamp(new Date());
+        PlayerMessage savedMsg = chatMessageService.saveNew(newPlayerMessage);//"Please send -1 to start the game"
+        sendMessageToClient(chatPlayerMessage, savedMsg);
     }
 
-    public void sendInvalidSenderMessage(Message chatMessage){
+    public void sendInvalidSenderMessage(PlayerMessage chatPlayerMessage){
         //chatMessageService.saveNew(chatMessage);
-        Message newMessage = new Message();
-        newMessage.setContent("Wait for my turn");
-        newMessage.setSenderId(chatMessage.getRecipientId());// on behalf of recipient
-        newMessage.setRecipientId(chatMessage.getSenderId());
-        newMessage.setTimestamp(new Date());
-        newMessage.setChatId(chatMessage.getChatId());
+        PlayerMessage newPlayerMessage = new PlayerMessage();
+        newPlayerMessage.setContent("Wait for my turn");
+        newPlayerMessage.setSenderId(chatPlayerMessage.getRecipientId());// on behalf of recipient
+        newPlayerMessage.setRecipientId(chatPlayerMessage.getSenderId());
+        newPlayerMessage.setTimestamp(new Date());
+        newPlayerMessage.setChatId(chatPlayerMessage.getChatId());
         //Message savedMsg = chatMessageService.saveNew(newMessage);//"Wait for my turn"
-        sendMessageToClient(chatMessage, newMessage);
+        sendMessageToClient(chatPlayerMessage, newPlayerMessage);
     }
 
-    public void sendLastMessage(Message chatMessage){
-        Message savedMsg = chatMessageService.saveNew(chatMessage);
-        sendMessageToClient(chatMessage, savedMsg);
+    public void sendLastMessage(PlayerMessage chatPlayerMessage){
+        PlayerMessage savedMsg = chatMessageService.saveNew(chatPlayerMessage);
+        sendMessageToClient(chatPlayerMessage, savedMsg);
     }
 
-    public void sendGameResultMessage(Message chatMessage){
-        Message message = new Message();
-        message.setContent("Game won by "+chatMessage.getSenderId());
-        message.setSenderId(chatMessage.getSenderId());
-        message.setRecipientId(chatMessage.getRecipientId());
-        message.setTimestamp(new Date());
-        Message gameOverMessage = chatMessageService.saveNew(message);//"Game over"
-        sendMessageToClient(chatMessage, gameOverMessage);
+    public void sendGameResultMessage(PlayerMessage chatPlayerMessage){
+        PlayerMessage playerMessage = new PlayerMessage();
+        playerMessage.setContent("Game won by "+ chatPlayerMessage.getSenderId());
+        playerMessage.setSenderId(chatPlayerMessage.getSenderId());
+        playerMessage.setRecipientId(chatPlayerMessage.getRecipientId());
+        playerMessage.setTimestamp(new Date());
+        PlayerMessage gameOverPlayerMessage = chatMessageService.saveNew(playerMessage);//"Game over"
+        sendMessageToClient(chatPlayerMessage, gameOverPlayerMessage);
     }
 
-    public void sendRegularMessage(Message chatMessage){
+    public void sendRegularMessage(PlayerMessage chatPlayerMessage){
         // set valid sender in Redis
-        Message savedMsg = chatMessageService.saveNew(chatMessage);
-        sendMessageToClient(chatMessage, savedMsg);
+        PlayerMessage savedMsg = chatMessageService.saveNew(chatPlayerMessage);
+        sendMessageToClient(chatPlayerMessage, savedMsg);
     }
 
-    public void sendRegularInvalidMessage(Message chatMessage){
-        Message newMessage = new Message();
-        newMessage.setContent("Please send a valid number to continue the game");
-        newMessage.setSenderId(chatMessage.getRecipientId());// on behalf of recipient
-        newMessage.setRecipientId(chatMessage.getSenderId());
-        newMessage.setTimestamp(new Date());
+    public void sendRegularInvalidMessage(PlayerMessage chatPlayerMessage){
+        PlayerMessage newPlayerMessage = new PlayerMessage();
+        newPlayerMessage.setContent("Please send a valid number to continue the game");
+        newPlayerMessage.setSenderId(chatPlayerMessage.getRecipientId());// on behalf of recipient
+        newPlayerMessage.setRecipientId(chatPlayerMessage.getSenderId());
+        newPlayerMessage.setTimestamp(new Date());
         // Message savedMsg = chatMessageService.saveNew(newMessage);//"Please send valid number to continue the game"
-        sendMessageToClient(chatMessage, newMessage);
+        sendMessageToClient(chatPlayerMessage, newPlayerMessage);
     }
 
-    public void sendAutomaticMessage(Message chatMessage) {
-        Message newMessage = new Message();
-        newMessage.setContent("Automated message from "+chatMessage.getRecipientId());
-        newMessage.setSenderId(chatMessage.getRecipientId());// on behalf of recipient
-        newMessage.setRecipientId(chatMessage.getSenderId());
-        newMessage.setTimestamp(new Date());
-        Message savedMsg = chatMessageService.saveNew(newMessage);//"Please send valid number to continue the game"
-        sendMessageToClient(chatMessage, newMessage);
+    public void sendAutomaticMessage(PlayerMessage chatPlayerMessage) {
+        PlayerMessage newPlayerMessage = new PlayerMessage();
+        newPlayerMessage.setContent("Automated message from "+ chatPlayerMessage.getRecipientId());
+        newPlayerMessage.setSenderId(chatPlayerMessage.getRecipientId());// on behalf of recipient
+        newPlayerMessage.setRecipientId(chatPlayerMessage.getSenderId());
+        newPlayerMessage.setTimestamp(new Date());
+        PlayerMessage savedMsg = chatMessageService.saveNew(newPlayerMessage);//"Please send valid number to continue the game"
+        sendMessageToClient(chatPlayerMessage, newPlayerMessage);
     }
 
-    public void sendAutomaticNumberMessage(Message chatMessage) {
-        Message newMessage = new Message();
-        int number = chatMessageService.processMessage(chatMessage);
-        newMessage.setContent(String.valueOf(getNextMoveNum(number)));
-        newMessage.setSenderId(chatMessage.getRecipientId());// on behalf of recipient
-        newMessage.setRecipientId(chatMessage.getSenderId());
-        newMessage.setTimestamp(new Date());
-        Message savedMsg = chatMessageService.saveNew(newMessage);//"auto num"
-        sendMessageToClient(chatMessage, savedMsg);
+    public void sendAutomaticNumberMessage(PlayerMessage chatPlayerMessage) {
+        PlayerMessage newPlayerMessage = new PlayerMessage();
+        int number = chatMessageService.processMessage(chatPlayerMessage);
+        newPlayerMessage.setContent(String.valueOf(getNextMoveNum(number)));
+        newPlayerMessage.setSenderId(chatPlayerMessage.getRecipientId());// on behalf of recipient
+        newPlayerMessage.setRecipientId(chatPlayerMessage.getSenderId());
+        newPlayerMessage.setTimestamp(new Date());
+        PlayerMessage savedMsg = chatMessageService.saveNew(newPlayerMessage);//"auto num"
+        sendMessageToClient(chatPlayerMessage, savedMsg);
     }
 
     public int getNextMoveNum(int num){
@@ -148,7 +148,7 @@ public class ClientMessageService {
 }
      */
 
-    private int sendMessageToClient(Message chatMessage,  Message savedMsg){
+    private int sendMessageToClient(PlayerMessage chatPlayerMessage, PlayerMessage savedMsg){
         messagingTemplate.convertAndSendToUser(
                 savedMsg.getRecipientId(), "/queue/messages",
                 new ChatNotification(

@@ -17,8 +17,8 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-/*
-ChatController to handle messages between 2 users
+/**
+ * ChatController to handle messages between 2 players
  */
 public class ChatController {
 
@@ -27,69 +27,73 @@ public class ChatController {
     private final ChatRoomService chatRoomService;
     private final ClientMessageService clientMessageService;
 
-    /*
-    method to process message passing and checks and balance on the overall flow, think of this like orchestrator
+    /**
+     * Method to process message passing and checks and balance on the overall flow, think of this like orchestrator
+     * @param chatPlayerMessage
      */
     @MessageMapping("/chat")
-    public void processMessage(@Payload Message chatMessage) {
-        int number = chatMessageService.processMessage(chatMessage);
-        var chatId = chatRoomService.getOrCreateChatId(chatMessage.getSenderId(), chatMessage.getRecipientId());
-        chatMessage.setChatId(chatId);
+    public void processMessage(@Payload PlayerMessage chatPlayerMessage) {
+        int number = chatMessageService.processMessage(chatPlayerMessage);
+        var chatId = chatRoomService.getOrCreateChatId(chatPlayerMessage.getSenderId(), chatPlayerMessage.getRecipientId());
+        chatPlayerMessage.setChatId(chatId);
         Game game = gameService.findActiveGame(chatId);
         if(game==null){// no active game apply rule 1. can only send -1
            if(number==-1){
-               gameService.startNewGame(chatMessage);
-               clientMessageService.sendRegularMessage(chatMessage);//send -1 and save
-               clientMessageService.sendGameStartedMessage(chatMessage);//send welcome and save
-               String randomNumContent = clientMessageService.sendRandomNumberMessage(chatMessage);// send random and save
-               String user = chatMessage.getRecipientId();
+               gameService.startNewGame(chatPlayerMessage);
+               clientMessageService.sendRegularMessage(chatPlayerMessage);//send -1 and save
+               clientMessageService.sendGameStartedMessage(chatPlayerMessage);//send welcome and save
+               String randomNumContent = clientMessageService.sendRandomNumberMessage(chatPlayerMessage);// send random and save
+               String user = chatPlayerMessage.getRecipientId();
                PlayerMode playerMode = gameService.getPlayerMode(user);
                String playerModeString = playerMode.getPlayerMode();
                if(playerModeString.equals("auto")) {
-                   clientMessageService.sendAutomaticMessage(chatMessage);//send auto message on behalf of recipient
-                   chatMessage.setContent(randomNumContent);
-                   clientMessageService.sendAutomaticNumberMessage(chatMessage);
+                   clientMessageService.sendAutomaticMessage(chatPlayerMessage);//send auto message on behalf of recipient
+                   chatPlayerMessage.setContent(randomNumContent);
+                   clientMessageService.sendAutomaticNumberMessage(chatPlayerMessage);
                }
            }else{
-               clientMessageService.sendInvalidNumberMessage(chatMessage);
+               clientMessageService.sendInvalidNumberMessage(chatPlayerMessage);
            }
         }
         else{// active game apply rules - 1. who can send the message 2. what should be the next message
-            boolean validSender = chatMessageService.isValidSender(chatMessage);
+            boolean validSender = chatMessageService.isValidSender(chatPlayerMessage);
             if(validSender==false){
-                clientMessageService.sendInvalidSenderMessage(chatMessage);
+                clientMessageService.sendInvalidSenderMessage(chatPlayerMessage);
             }else{
-                int lastNumber = chatMessageService.getLastNumber(chatMessage);
+                int lastNumber = chatMessageService.getLastNumber(chatPlayerMessage);
                 int nextNum = clientMessageService.getNextMoveNum(lastNumber);
 
                 if(number==nextNum){
                     if(number==1){
                        gameService.completeGame(game);// end the game
-                       clientMessageService.sendLastMessage(chatMessage);
-                       clientMessageService.sendGameResultMessage(chatMessage);
+                       clientMessageService.sendLastMessage(chatPlayerMessage);
+                       clientMessageService.sendGameResultMessage(chatPlayerMessage);
                     }
                     else {
-                        String user = chatMessage.getRecipientId();
+                        String user = chatPlayerMessage.getRecipientId();
                         if(gameService.getPlayerMode(user).equals("auto")){
-                            clientMessageService.sendAutomaticMessage(chatMessage);//send auto message on behalf of recipient
-                            clientMessageService.sendAutomaticNumberMessage(chatMessage);
+                            clientMessageService.sendAutomaticMessage(chatPlayerMessage);//send auto message on behalf of recipient
+                            clientMessageService.sendAutomaticNumberMessage(chatPlayerMessage);
                         }else {
-                            clientMessageService.sendRegularMessage(chatMessage);
+                            clientMessageService.sendRegularMessage(chatPlayerMessage);
                         }
                     }
                 }else{
-                    clientMessageService.sendRegularInvalidMessage(chatMessage);
+                    clientMessageService.sendRegularInvalidMessage(chatPlayerMessage);
                 }
             }
         }
     }
 
-    /*
-    method to find chat messages when a player logs into the application
+    /**
+     * Method to find previous chat messages when a player logs into the application, this method handles the offline user feature
+     * @param senderId
+     * @param recipientId
+     * @return
      */
     @GetMapping("/messages/{senderId}/{recipientId}")
-    public ResponseEntity<List<Message>> findChatMessages(@PathVariable String senderId,
-                                                              @PathVariable String recipientId) {
+    public ResponseEntity<List<PlayerMessage>> findChatMessages(@PathVariable String senderId,
+                                                                @PathVariable String recipientId) {
         return ResponseEntity
                 .ok(chatMessageService.findChatMessages(senderId, recipientId));
     }
