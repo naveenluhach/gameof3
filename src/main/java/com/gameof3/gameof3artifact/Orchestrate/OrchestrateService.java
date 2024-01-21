@@ -4,24 +4,23 @@ import com.gameof3.gameof3artifact.ChatRoom.ChatRoomService;
 import com.gameof3.gameof3artifact.Game.Game;
 import com.gameof3.gameof3artifact.Game.GameService;
 import com.gameof3.gameof3artifact.Game.PlayerMode;
-import com.gameof3.gameof3artifact.chat.ChatMessageService;
+import com.gameof3.gameof3artifact.chat.PlayerMessageService;
 import com.gameof3.gameof3artifact.chat.PlayerMessage;
 import com.gameof3.gameof3artifact.clientmessage.ClientMessageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class OrchestrateService {
 
-    private final ChatMessageService chatMessageService;
+    private final PlayerMessageService playerMessageService;
     private final GameService gameService;
     private final ChatRoomService chatRoomService;
     private final ClientMessageService clientMessageService;
 
     public void processPlayerMessage(PlayerMessage playerMessage) {
-        int number = chatMessageService.processMessage(playerMessage);
+        int number = playerMessageService.processMessage(playerMessage);
         var chatId = chatRoomService.getOrCreateChatId(playerMessage.getSenderId(), playerMessage.getRecipientId());
         playerMessage.setChatId(chatId);
         Game game = gameService.findActiveGame(chatId);
@@ -44,11 +43,11 @@ public class OrchestrateService {
             }
         }
         else{// active game apply rules - 1. who can send the message 2. what should be the next message
-            boolean validSender = chatMessageService.isValidSender(playerMessage);
+            boolean validSender = playerMessageService.isValidSender(playerMessage);
             if(validSender==false){
                 clientMessageService.sendInvalidSenderMessage(playerMessage);
             }else{
-                int lastNumber = chatMessageService.getLastNumber(playerMessage);
+                int lastNumber = playerMessageService.getLastNumber(playerMessage);
                 int nextNum = clientMessageService.getNextMoveNum(lastNumber);
 
                 if(number==nextNum){

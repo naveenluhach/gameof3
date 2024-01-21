@@ -11,30 +11,35 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ChatMessageService {
+public class PlayerMessageService {
+
     private final ChatMessageRepository chatMessageRepository;
     private final ChatRoomService chatRoomService;
 
-    /*
-    Save the chatMessage to DB
+    /**
+     * Save the chatMessage to DB
+     * @param playerMessage
+     * @return
      */
-    public PlayerMessage saveNew(PlayerMessage chatPlayerMessage){
+    public PlayerMessage saveNew(PlayerMessage playerMessage){
         String chatId = "";
-        String chatRoomExists = chatRoomService.checkIfChatRoomIdExists(chatPlayerMessage.getSenderId(), chatPlayerMessage.getRecipientId());
+        String chatRoomExists = chatRoomService.checkIfChatRoomIdExists(playerMessage.getSenderId(), playerMessage.getRecipientId());
         if(!chatRoomExists.equals("-1")){
-            ChatRoom chatRoom = chatRoomService.findChatRoomId(chatPlayerMessage.getSenderId(), chatPlayerMessage.getRecipientId());
+            ChatRoom chatRoom = chatRoomService.findChatRoomId(playerMessage.getSenderId(), playerMessage.getRecipientId());
             chatId = chatRoom.getChatId();
         }else{
-            chatId = chatRoomService.createChatId(chatPlayerMessage.getSenderId(), chatPlayerMessage.getRecipientId());
+            chatId = chatRoomService.createChatId(playerMessage.getSenderId(), playerMessage.getRecipientId());
         }
-        chatPlayerMessage.setChatId(chatId);
-        chatMessageRepository.save(chatPlayerMessage);
-        return chatPlayerMessage;
+        playerMessage.setChatId(chatId);
+        chatMessageRepository.save(playerMessage);
+        return playerMessage;
     }
 
-
-    /*
-    finds the chat messages for a sender
+    /**
+     * Mthod to find the chat messages for a sender
+     * @param senderId
+     * @param recipientId
+     * @return
      */
     public List<PlayerMessage> findChatMessages(String senderId, String recipientId) {
         String chatRoomId= chatRoomService.checkIfChatRoomIdExists(senderId, recipientId);
@@ -45,30 +50,36 @@ public class ChatMessageService {
         }
     }
 
-    /*
-     method to find the integer message from chat message
+    /**
+     * Method to convert string message to int message
+     * @param playerMessage
+     * @return
      */
-    public int processMessage(PlayerMessage chatPlayerMessage){
-        String content  = chatPlayerMessage.getContent();
+    public int processMessage(PlayerMessage playerMessage){
+        String content  = playerMessage.getContent();
         int number = Integer.parseInt(content);
         return number;
     }
 
-    /*
-    method to check if sender is valid (should not be last sender) or not
+    /**
+     * Method to check if sender is valid (should not be last sender) or not
+     * @param playerMessage
+     * @return
      */
-    public boolean isValidSender(PlayerMessage chatPlayerMessage){
-        PlayerMessage lastPlayerMessage = getlastMessage(chatPlayerMessage);
+    public boolean isValidSender(PlayerMessage playerMessage){
+        PlayerMessage lastPlayerMessage = getlastMessage(playerMessage);
         String lastSenderId = lastPlayerMessage.getSenderId();
-        if(chatPlayerMessage.getSenderId().equals(lastSenderId)){
+        if(playerMessage.getSenderId().equals(lastSenderId)){
             return false;
         }else{
             return true;
         }
     }
 
-    /*
-    method to find the last number sent between 2 players
+    /**
+     * Method to find the last number sent between 2 players
+     * @param playerMessage
+     * @return
      */
     public int getLastNumber(PlayerMessage playerMessage){
         PlayerMessage lastPlayerMessage = getlastMessage(playerMessage);
@@ -76,11 +87,14 @@ public class ChatMessageService {
         return Integer.valueOf(lastNumber);
     }
 
-    /*
-    method to find the last message sent between 2 players
+
+    /**
+     * Method to find the last message sent between 2 players
+     * @param playerMessage
+     * @return
      */
-    public PlayerMessage getlastMessage(PlayerMessage chatPlayerMessage){
-       List<PlayerMessage> playerMessages = chatMessageRepository.findByChatId(chatPlayerMessage.getChatId());
+    private PlayerMessage getlastMessage(PlayerMessage playerMessage){
+       List<PlayerMessage> playerMessages = chatMessageRepository.findByChatId(playerMessage.getChatId());
        // sort the list with highest timestamp
         Collections.sort(playerMessages, (m1, m2) -> m2.getTimestamp().compareTo(m1.getTimestamp()));
         PlayerMessage latestPlayerMessage = playerMessages.isEmpty() ? null : playerMessages.get(0);
