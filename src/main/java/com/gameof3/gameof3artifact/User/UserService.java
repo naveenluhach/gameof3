@@ -27,8 +27,8 @@ public class UserService {
      * @param user The user entity to be saved.
      */
     public void saveUser(User user) {
-        user.setStatus(Status.ONLINE);
-        repository.save(user);
+        User modifiedUser = user.updateStatus(user, Status.ONLINE);
+        repository.save(modifiedUser);
     }
 
     /**
@@ -39,8 +39,8 @@ public class UserService {
     public void disconnect(User user) {
         var storedUser = repository.findById(user.getNickName()).orElse(null);
         if (storedUser != null) {
-            storedUser.setStatus(Status.OFFLINE);
-            repository.save(storedUser);
+            User modifiedStoredUser = storedUser.updateStatus(storedUser, Status.OFFLINE);
+            repository.save(modifiedStoredUser);
         }
     }
 

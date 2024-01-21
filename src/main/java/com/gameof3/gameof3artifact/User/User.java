@@ -27,4 +27,33 @@ public class User {
      * Status of the user (e.g., "ONLINE", "OFFLINE").
      */
     private Status status;
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    private void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    private void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    private void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public User updateStatus(User user, Status status){
+        user.setStatus(status);
+        return user;
+    }
 }
