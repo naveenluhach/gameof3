@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+/**
+ * Orchestrate service to talk to different services and coordinate between them
+ */
 public class OrchestrateService {
 
     private final PlayerMessageService playerMessageService;
@@ -19,22 +22,34 @@ public class OrchestrateService {
     private final ChatRoomService chatRoomService;
     private final ClientMessageService clientMessageService;
 
+    /**
+     * Method to process message between 2 players
+     * @param playerMessage
+     */
     public void processPlayerMessage(PlayerMessage playerMessage) {
         int number = playerMessageService.processMessage(playerMessage);
         var chatId = chatRoomService.getOrCreateChatId(playerMessage.getSenderId(), playerMessage.getRecipientId());
         playerMessage.setChatId(chatId);
         Game game = gameService.findActiveGame(chatId);
-        if(game==null){// no active game apply rule 1. can only send -1
+
+        // Check if no active game
+        if(game==null){
+            // Rule check: Fist number can only be -1
             if(number==-1){
                 gameService.startNewGame(playerMessage);
-                clientMessageService.sendRegularMessage(playerMessage);//send -1 and save
-                clientMessageService.sendGameStartedMessage(playerMessage);//send welcome and save
-                String randomNumContent = clientMessageService.sendRandomNumberMessage(playerMessage);// send random and save
+                clientMessageService.sendRegularMessage(playerMessage);
+                // Send welcome message
+                clientMessageService.sendGameStartedMessage(playerMessage);
+
+                // Send random number
+                String randomNumContent = clientMessageService.sendRandomNumberMessage(playerMessage);
                 String user = playerMessage.getRecipientId();
                 PlayerMode playerMode = gameService.getPlayerMode(user);
                 String playerModeString = playerMode.getPlayerMode();
+
+                // Check if automatic reply is enabled
                 if(playerModeString.equals("auto")) {
-                    clientMessageService.sendAutomaticMessage(playerMessage);//send auto message on behalf of recipient
+                    clientMessageService.sendAutomaticMessage(playerMessage);
                     playerMessage.setContent(randomNumContent);
                     clientMessageService.sendAutomaticNumberMessage(playerMessage);
                 }
@@ -42,24 +57,29 @@ public class OrchestrateService {
                 clientMessageService.sendInvalidNumberMessage(playerMessage);
             }
         }
-        else{// active game apply rules - 1. who can send the message 2. what should be the next message
+        // If active game is already present
+        else{
             boolean validSender = playerMessageService.isValidSender(playerMessage);
+            // Rule number 1 check : Who can send the message
             if(validSender==false){
                 clientMessageService.sendInvalidSenderMessage(playerMessage);
             }else{
                 int lastNumber = playerMessageService.getLastNumber(playerMessage);
                 int nextNum = clientMessageService.getNextMoveNum(lastNumber);
 
+                // Rule number 2 check: What should be the next number
                 if(number==nextNum){
                     if(number==1){
-                        gameService.completeGame(game);// end the game
+                        // End the game
+                        gameService.completeGame(game);
                         clientMessageService.sendLastMessage(playerMessage);
                         clientMessageService.sendGameResultMessage(playerMessage);
                     }
                     else {
                         String user = playerMessage.getRecipientId();
+                        // Check if automatic reply is enabled
                         if(gameService.getPlayerMode(user).equals("auto")){
-                            clientMessageService.sendAutomaticMessage(playerMessage);//send auto message on behalf of recipient
+                            clientMessageService.sendAutomaticMessage(playerMessage);
                             clientMessageService.sendAutomaticNumberMessage(playerMessage);
                         }else {
                             clientMessageService.sendRegularMessage(playerMessage);
