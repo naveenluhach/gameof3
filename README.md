@@ -46,8 +46,8 @@ Pre-requiste
 
 **Step 1:**
 Install Docker
-**
-Step 2:**
+
+**Step 2:**
 Run Docker 
 
 **Step 3:** docker-compose up (in the project directory once you clone it)
